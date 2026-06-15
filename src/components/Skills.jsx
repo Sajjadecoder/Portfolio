@@ -1,3 +1,6 @@
+import { motion } from "framer-motion";
+import { fadeUp, stagger, viewportOnce } from "./motion";
+
 const SKILL_GROUPS = [
   {
     category: "Languages",
@@ -43,26 +46,40 @@ const COMPETENCIES = [
 export default function Skills() {
   return (
     <section id="skills" className="py-24 px-6 border-t border-[#1E2740]">
-      <div className="max-w-6xl mx-auto">
-        {/* Section label */}
-        <div className="flex items-center gap-4 mb-16">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={stagger}
+        className="max-w-6xl mx-auto"
+      >
+        <motion.div variants={fadeUp} className="flex items-center gap-4 mb-16">
           <span className="font-['JetBrains_Mono'] text-[#00D4FF] text-xs tracking-[0.4em] uppercase">
             03 / skills
           </span>
-          <div className="flex-1 h-px bg-[#1E2740]" />
-        </div>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="flex-1 h-px bg-gradient-to-r from-[#00D4FF]/40 via-[#1E2740] to-transparent origin-left"
+          />
+        </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left: skill groups */}
           <div>
-            <h2 className="font-['JetBrains_Mono'] text-2xl font-bold text-[#E8EDF5] mb-8">
+            <motion.h2 variants={fadeUp} className="font-['JetBrains_Mono'] text-2xl font-bold text-[#E8EDF5] mb-8">
               Tech Stack
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
+            </motion.h2>
+            <motion.div variants={stagger} className="grid grid-cols-2 gap-4">
               {SKILL_GROUPS.map((group) => (
-                <div
+                <motion.div
                   key={group.category}
-                  className="bg-[#0D1120] border border-[#1E2740] p-4 hover:border-[#00D4FF]/20 transition-colors"
+                  variants={fadeUp}
+                  whileHover={{ y: -3, borderColor: "rgba(0,212,255,0.25)" }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-[#0D1120] border border-[#1E2740] p-4"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span className="font-['JetBrains_Mono'] text-[#00D4FF] text-sm">
@@ -83,19 +100,19 @@ export default function Skills() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Right: competency bars */}
           <div>
-            <h2 className="font-['JetBrains_Mono'] text-2xl font-bold text-[#E8EDF5] mb-8">
+            <motion.h2 variants={fadeUp} className="font-['JetBrains_Mono'] text-2xl font-bold text-[#E8EDF5] mb-8">
               Competencies
-            </h2>
-            <div className="space-y-6">
+            </motion.h2>
+            <motion.div variants={stagger} className="space-y-6">
               {COMPETENCIES.map((item) => (
-                <div key={item.label}>
+                <motion.div key={item.label} variants={fadeUp}>
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-['JetBrains_Mono'] text-sm text-[#E8EDF5]/70">
                       {item.label}
@@ -104,26 +121,35 @@ export default function Skills() {
                       {item.pct}%
                     </span>
                   </div>
-                  <div className="h-0.5 bg-[#1E2740] w-full">
-                    <div
-                      className="h-full bg-gradient-to-r from-[#00D4FF] to-[#00D4FF]/40 transition-all duration-1000"
-                      style={{ width: `${item.pct}%` }}
+                  <div className="h-0.5 bg-[#1E2740] w-full overflow-hidden">
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      viewport={viewportOnce}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      style={{ width: `${item.pct}%`, originX: 0 }}
+                      className="h-full bg-gradient-to-r from-[#00D4FF] to-[#00D4FF]/40"
                     />
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Certifications */}
-            <div className="mt-12 bg-[#0D1120] border border-[#1E2740] p-6">
+            <motion.div
+              variants={fadeUp}
+              whileHover={{ y: -3, borderColor: "rgba(0,212,255,0.25)" }}
+              transition={{ duration: 0.25 }}
+              className="mt-12 bg-[#0D1120] border border-[#1E2740] p-6"
+            >
               <div className="font-['JetBrains_Mono'] text-xs text-[#00D4FF]/70 tracking-widest uppercase mb-4">
-                Certifications
+                Certifications (Deeplearning.ai)
               </div>
               <div className="space-y-3">
                 {[
-                  "Machine Learning Specialization",
-                  "Deep Learning / CNN",
-                  "ML End-to-End Pipelines",
+                  "Supervised Machine Learning: Regression and Classification",
+                  "Advanced Learning Algorithms",
+                  "Unsupervised Learning, Recommenders, Reinforcement Learning",
                 ].map((cert) => (
                   <div key={cert} className="flex items-center gap-3">
                     <span className="w-1.5 h-1.5 bg-[#00D4FF] flex-shrink-0" />
@@ -133,10 +159,10 @@ export default function Skills() {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

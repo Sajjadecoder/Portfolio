@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { fadeUp, stagger, viewportOnce } from "./motion";
 
 const PROJECTS = [
   {
@@ -89,29 +91,44 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-24 px-6 border-t border-[#1E2740]">
-      <div className="max-w-6xl mx-auto">
-        {/* Section label */}
-        <div className="flex items-center gap-4 mb-4">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={stagger}
+        className="max-w-6xl mx-auto"
+      >
+        <motion.div variants={fadeUp} className="flex items-center gap-4 mb-4">
           <span className="font-['JetBrains_Mono'] text-[#00D4FF] text-xs tracking-[0.4em] uppercase">
             02 / projects
           </span>
-          <div className="flex-1 h-px bg-[#1E2740]" />
-        </div>
-        <h2 className="font-['JetBrains_Mono'] text-3xl md:text-4xl font-bold text-[#E8EDF5] mb-2">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="flex-1 h-px bg-gradient-to-r from-[#00D4FF]/40 via-[#1E2740] to-transparent origin-left"
+          />
+        </motion.div>
+        <motion.h2 variants={fadeUp} className="font-['JetBrains_Mono'] text-3xl md:text-4xl font-bold text-[#E8EDF5] mb-2">
           Things I've Built
-        </h2>
-        <p className="text-[#E8EDF5]/40 text-sm mb-14 font-['JetBrains_Mono']">
+        </motion.h2>
+        <motion.p variants={fadeUp} className="text-[#E8EDF5]/40 text-sm mb-14 font-['JetBrains_Mono']">
           click a card to expand details
-        </p>
+        </motion.p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <motion.div variants={stagger} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {PROJECTS.map((proj) => {
             const isActive = activeId === proj.id;
             return (
-              <div
+              <motion.div
                 key={proj.id}
+                layout
+                variants={fadeUp}
+                whileHover={{ y: -4 }}
+                transition={{ layout: { duration: 0.3, ease: "easeOut" } }}
                 onClick={() => setActiveId(isActive ? null : proj.id)}
-                className={`bg-[#0D1120] border cursor-pointer transition-all duration-300 group ${
+                className={`bg-[#0D1120] border cursor-pointer transition-colors duration-300 group ${
                   isActive
                     ? "border-[#00D4FF]/40 col-span-1 md:col-span-2 lg:col-span-1"
                     : "border-[#1E2740] hover:border-[#00D4FF]/20"
@@ -152,16 +169,26 @@ export default function Projects() {
                   </div>
 
                   {/* Expanded highlights */}
-                  {isActive && (
-                    <div className="mt-4 pt-4 border-t border-[#1E2740] space-y-2">
-                      {proj.highlights.map((h) => (
-                        <div key={h} className="flex items-start gap-2">
-                          <span className="text-[#00D4FF] text-xs mt-0.5">▸</span>
-                          <span className="text-[#E8EDF5]/60 text-xs">{h}</span>
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-4 pt-4 border-t border-[#1E2740] space-y-2">
+                          {proj.highlights.map((h) => (
+                            <div key={h} className="flex items-start gap-2">
+                              <span className="text-[#00D4FF] text-xs mt-0.5">▸</span>
+                              <span className="text-[#E8EDF5]/60 text-xs">{h}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   {/* Footer row */}
                   <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#1E2740]">
@@ -185,12 +212,12 @@ export default function Projects() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        <div className="mt-10 text-center">
+        <motion.div variants={fadeUp} className="mt-10 text-center">
           <a
             href="https://github.com/Sajjadecoder"
             target="_blank"
@@ -199,8 +226,8 @@ export default function Projects() {
           >
             → view all 27 repositories on GitHub
           </a>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
